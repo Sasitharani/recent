@@ -8,9 +8,9 @@ export default function Footer() {
       <span className="text-sm text-gray-900 sm:text-center ">© 2024 <a  className="hover:underline">Frank and Oak <sup>™</sup></a>. All Rights Reserved.
     </span>
     <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 sm:mt-0">
-        <li>
+        {/* <li>
             <a href="#" className="hover:underline me-4 md:me-6">Design By <span className='text-blue-600'>Roshan Chaurasia</span></a>
-        </li>
+        </li> */}
         
     </ul>
     </div>

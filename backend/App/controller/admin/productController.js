@@ -85,8 +85,6 @@ let subCategoryView=async (req,res)=>{
         status:1,
         datalist:subCatData
     })    
-   
-   
 }
 
 let colorView=async (req,res)=>{
