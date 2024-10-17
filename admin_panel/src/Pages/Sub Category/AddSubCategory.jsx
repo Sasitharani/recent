@@ -23,6 +23,7 @@ export default function AddSubCategory() {
     axios
       .post(AdminBaseURL + "/sub-category/insert", formDataValue)
       .then((res) => {
+        console.log(res)
         if (res.data.status) {
           toast.success(`${res.data.res.subCategoryName} sub category added.`);
           setNavigatorStatus(true);

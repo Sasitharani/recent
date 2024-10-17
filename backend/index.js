@@ -19,4 +19,4 @@ mongoose.connect(`mongodb+srv://sasitharan:sasi@learn.vfrd0.mongodb.net/${proces
 .then((res)=>{
     app.listen(process.env.SERVER_PORT)
     console.log(process.env.SERVER_PORT)
-})
+}) 

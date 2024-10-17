@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Breadcrumb from '../../common/Breadcrumb'
 import axios from 'axios'
 import { AdminBaseURL } from '../../config/config'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ProductDetails() {
   let [sizeData,setSizeData]=useState([])
@@ -9,6 +12,7 @@ export default function ProductDetails() {
   let [parentCatData,setParentCatData]=useState([])
   const [galleryPreview, setGalleryPreview] = useState([]);
   let [subCatData,setsubCatData]=useState([])
+  let [navigatorStatus, setNavigatorStatus] = useState(false);
 
   const handleGalleryPreview = (e) => {
     setGalleryPreview(Array.from(e.target.files));
@@ -49,13 +53,84 @@ export default function ProductDetails() {
     let formDataValue = new FormData(event.target);
     axios.post(AdminBaseURL+"/product/product-insert",formDataValue)
     .then((res)=>{
-      console.log(res.data) 
+      
+      if(res.data.status){
+        console.log(res.data) 
+        toast.success("Data Added");
+        setNavigatorStatus(true);
+      }
     })
     
   }
+  let navigator = useNavigate();
+  useEffect(() => {
+    if (navigatorStatus) {
+      setTimeout(() => {
+        navigator("/product/product-items");
+      }, 2000);
+    }
+  }, [navigatorStatus]);
+
+  let multipleRowDelete = () => {
+    if (allCheckedId.length == 0) {
+      Swal.fire({
+        title: "Please select Checkboxes to delete data !",
+      });
+    } else {
+      const swalWithBootstrapButtons = Swal.mixin({
+        buttonsStyling: true,
+      });
+
+      swalWithBootstrapButtons
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, cancel!",
+          reverseButtons: true,
+          confirmButtonColor: "#F90101",
+          cancelButtonColor: "#0D0D0D",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            axios
+            .post(AdminBaseURL + "/product/multiple-delete", {
+                ids: allCheckedId,
+              })
+              .then((res) => {
+                if (res.data.status == 1) {
+                  console.log(res.data);
+                  viewCategory();
+                  swalWithBootstrapButtons.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success",
+                  });
+                }
+              })
+              .catch((error) => {
+                swalWithBootstrapButtons.fire({
+                  title: "Error!",
+                  text: "An server error occurred !",
+                  icon: "error",
+                });
+              });
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire({
+              title: "Cancelled",
+              text: "Your file is safe :)",
+              icon: "error",
+            });
+          }
+        });
+    }
+  };
+
   return (
     <section className="w-full">
-
+        <ToastContainer />
         <Breadcrumb
           path={"Product"}
           path2={"Product Details"}
