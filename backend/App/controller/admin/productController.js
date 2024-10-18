@@ -3,11 +3,12 @@ const { colorModal } = require("../../modal/admin/colorModal")
 const { productModal } = require("../../modal/admin/ProductModel")
 const { sizeModal } = require("../../modal/admin/sizeModal")
 const { subcategoryModel } = require("../../modal/admin/subCategoryModal")
+fs = require("fs");
 
 
 
 let productInsert=async (req,res)=>{
-
+  console.log('working')
  //console.log(req.body.productSizeId) 
    let insertobj={
     productName:req.body. productName,
@@ -19,14 +20,14 @@ let productInsert=async (req,res)=>{
     productPrice:req.body.pdPrice,
     productMrp:req.body.pdMRP,
    }
- 
+ console.log('working')
    if(req.body.productSizeId=='--Select Size--' ){
     console.log('--Select Size--')
     //console.log(insertobj)
    }else{
     console.log("else for size working")
     insertobj['productSize']=req.body.productSizeId
-    console.log(req.body.productSizeId) 
+    //console.log(req.body.productSizeId) 
     //console.log(insertobj)
    }
    if(req.body.productColorId=='--Select Color--'){
@@ -55,7 +56,41 @@ let productInsert=async (req,res)=>{
   //console.log(obj)
    res.send(obj)
 }
+let singleCategoryDelete = async (req, res) => {
+  //console.log('new new new')
+  try {
+    ///console.log('Inside Try Loop')
+    let ID = req.params.id;
+    //console.log(ID)
+    const productData = await productModal.findOne({ _id: ID });
+    if (productData) {
+      let imageName = await productData.productImage;
+      let path = "uploads/product/" + imageName;
+      fs.unlinkSync(path);
 
+      let deleteSingleRow = await productModal.deleteOne({ _id: ID }); 
+      //console.log(deleteSingleRow)
+      if (deleteSingleRow.deletedCount == 0) {
+        return res.status(404).json({
+          status: 0,
+          message: "No record found to delete.",
+        });
+      }
+      res.status(200).json({
+        status: 1,
+        message: "Data deleted.",
+        res: deleteSingleRow,
+
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      status: 0,
+      message: "Server error occurred.",
+    });
+    productView()
+  }
+};
 let productView=async (req,res)=>{
     let searchObject = {};
     
@@ -76,18 +111,26 @@ let productView=async (req,res)=>{
 }
 
 let multipleCategoryRowDelete = async (req, res) => {
-    console.log("ok ok")
+    //console.log(req.body)
     try {
       let { ids } = req.body;
       let deleteSingleRow;
       for (ID of ids) {
-        const categoryData = await productModal.findOne({ _id: ID });
-        if (categoryData) {
-          let imageName = await categoryData.categoryImage;
-          let path = "uploads/category/" + imageName;
+        
+        const productData = await productModal.findOne({ _id: ID });
+        
+        if (productData) {
+          //console.log(productData)---------working
+          let imageName = await productData.productImage;
+          //imageName = imageName.replace(/\s+/g, '');
+          let path = "uploads/product/" + imageName;
+          console.log(path)
+          //------------working
+          console.log('working 1')
           fs.unlinkSync(path);
-  
+          console.log('working 2')
           deleteSingleRow = await productModal.deleteOne({ _id: ID });
+          console.log(deleteSingleRow)
           if (deleteSingleRow.deletedCount == 0) {
             res.status(404).json({
               status: 0,
@@ -107,6 +150,7 @@ let multipleCategoryRowDelete = async (req, res) => {
         message: "Server error occurred",
       });
     }
+    productView()
   };
   
 
@@ -144,4 +188,4 @@ let colorView=async (req,res)=>{
         datalist:colorData
     })
 }
-module.exports={sizeView, colorView,subCategoryView,productInsert,parentcat,productView,multipleCategoryRowDelete}
+module.exports={sizeView, colorView,subCategoryView,productInsert,parentcat,productView,multipleCategoryRowDelete,singleCategoryDelete}

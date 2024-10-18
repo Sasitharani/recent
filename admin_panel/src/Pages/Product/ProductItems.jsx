@@ -280,6 +280,9 @@ import Breadcrumb from "../../common/Breadcrumb";
 import axios from "axios";
 import { AdminBaseURL } from "../../config/config";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function ProductItems() {
   let [allCheckedId, setAllCheckedId] = useState([]);
@@ -308,6 +311,8 @@ export default function ProductItems() {
         }
       });
   };
+
+    
 /////////////////Works on click of check Box//////////////////////
   let getAllCheckedID = (event) => {
     if (event.target.checked) {
@@ -317,7 +322,7 @@ export default function ProductItems() {
       setAllCheckedId(filteredID);
     }
   };
-////////////////Multiple Row Delete/////////////////////////////////
+////////////////Multiple Row Delete with Sweet alert/////////////////////////////////
   let multipleRowDelete = () => {
     console.log(allCheckedId.length)
     if (allCheckedId.length == 0) {
@@ -343,12 +348,13 @@ export default function ProductItems() {
         })
         .then((result) => {
           if (result.isConfirmed) {
+            //////API start/////////////
             axios
               .post(AdminBaseURL + "/product/multiple-delete", {ids: allCheckedId,})
               .then((res) => {
                 if (res.data.status == 1) {
                   console.log(res.data);
-                  viewCategory();
+              
                   swalWithBootstrapButtons.fire({
                     title: "Deleted!",
                     text: "Your file has been deleted.",
@@ -373,14 +379,63 @@ export default function ProductItems() {
         });
     }
   };
-///////////////UseEffect to view current Page///////////////////
+
+  let handleDeleteClick =(id)=>{
+    const swalWithBootstrapButtons = Swal.mixin({
+      buttonsStyling: true,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+        confirmButtonColor: "#F90101",
+        cancelButtonColor: "#0D0D0D",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          axios.post(AdminBaseURL + `/product/delete/${id}`).then((res) => {
+            if (res.data.status == 1) {
+              console.log(res.data);
+            }
+            swalWithBootstrapButtons.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
+            viewCategory();
+          });
+        } else if (
+      
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: "Cancelled",
+            text: "Your imaginary file is safe :)",
+            icon: "error",
+          });
+        }
+      });
+  };
+  let handleUpdateClick =()=>{
+    console.log("Update clicked")
+  }
+///////////////S-UseEffect to view current Page///////////////////
   useEffect(() => {
     viewProduct();
   }, [currentPage]);
-///////////////UseEffect controlled component for checkbox multiple delete///////////////////
+  ///////////////E-UseEffect to view current Page///////////////////
+  ////--------------------------------------------------------/////
+///////////////S-UseEffect controlled component for checkbox multiple delete///////////////////
   useEffect(() => {
     console.log(allCheckedId);
   }, [allCheckedId]);
+///////////////E-UseEffect controlled component for checkbox multiple delete///////////////////
+  
 
   return (
     <section className="w-full">
@@ -506,73 +561,97 @@ export default function ProductItems() {
 
       <div className="w-full min-h-[610px]">
         <form>
-        <div className="max-w-[1220px] mx-auto py-5">
-          <h3 className="text-[26px] font-semibold bg-slate-100 py-3 px-4 rounded-t-md border border-slate-400">
-            Product Items
-          </h3>
-          <div className="border border-t-0 rounded-b-md border-slate-400">
-            <div className="relative overflow-x-auto">
-              <table className="w-full text-left rtl:text-right text-gray-500">
-                <thead className="text-sm text-gray-700 uppercase bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                    <button
-                        type="button"
-                        onClick={multipleRowDelete}
-                        className="text-black bg-gradient-to-br from-red-600 to-white-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-black-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                      >
-                        Delete
-                      </button>
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Product Name
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Description
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Short Description
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Thumbnails
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Action
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {productData.map((product, index) => (
-                    <tr key={index}>
-                      <td className="px-6 py-4">
-                      <input
+          <div className="max-w-[1220px] mx-auto py-5">
+            <h3 className="text-[26px] font-semibold bg-slate-100 py-3 px-4 rounded-t-md border border-slate-400">
+              Product Items
+            </h3>
+            <div className="border border-t-0 rounded-b-md border-slate-400">
+              <div className="relative overflow-x-auto">
+                <table className="w-full text-left rtl:text-right text-gray-500">
+                  {/*////////////////////////////////////////////////S-Heading Row  ////////////////////////////////////////// */}
+                  <thead className="text-sm text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3">
+                        <button
+                          type="button"
+                          onClick={multipleRowDelete}
+                          className="text-black bg-gradient-to-br from-red-600 to-white-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-black-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                        >
+                          Delete
+                        </button>
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Product Name
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Description
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Short Description
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Thumbnails
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Action
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  {/*//////////////////////////////////////////////// E-Heading Row////////////////////////////////////////// */}
+                  <tbody>
+                    {productData.map((product, index) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4">
+                          <input
                             name="deleteCheck"
                             id="purple-checkbox"
                             type="checkbox"
                             onChange={getAllCheckedID}
                             value={product._id}
-                            checked={ allCheckedId.includes(product._id) ? true : '' }
+                            checked={
+                              allCheckedId.includes(product._id) ? true : ""
+                            }
                             className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 "
                           />
-                      </td>
-                      <td className="px-10 py-4">{product.productName}</td>
-                      <td className="px-10 py-4">{product.productDes}</td>
-                      <td className="px-10 py-4">{product.productShortDes}</td>
-                      <td className="px-10 py-4">{product.subCategoryName}</td>
-                      <td className="px-10 py-4"></td>
-                      <td className="px-8 py-4">
-                        {product.productStatus ? "Active" : "Deactive"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        </td>
+                        <td className="px-10 py-4">{product.productName}</td>
+                        <td className="px-10 py-4">{product.productDes}</td>
+                        <td className="px-10 py-4">
+                          {product.productShortDes}
+                        </td>
+                        <td className="px-10 py-4">Thumb</td>
+                        <td className="px-10 py-4">
+                          {/* S-Delete and update Button */}
+                          <td>
+                            {/* <!-- Edit Button --> */}
+                            <FontAwesomeIcon
+                              icon={faEdit}
+                              style={{ cursor: "pointer", marginRight: "10px" }}
+                              onClick={() =>handleUpdateClick(product._id)}
+                            />
+
+                            {/* <!-- Delete Button --> */}
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              style={{ cursor: "pointer" }}
+                              onClick={() =>handleDeleteClick(product._id)}
+                            />
+                          </td>
+                          {/* E-Delete and update Button */}
+                        </td>
+                        <td className="px-8 py-4">
+                          {product.productStatus ? "Active" : "Deactive"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
         </form>
       </div>
     </section>

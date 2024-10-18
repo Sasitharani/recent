@@ -13,6 +13,7 @@ export default function ProductDetails() {
   const [galleryPreview, setGalleryPreview] = useState([]);
   let [subCatData,setsubCatData]=useState([])
   let [navigatorStatus, setNavigatorStatus] = useState(false);
+  let [allCheckedId, setAllCheckedId] = useState([]);
 
   const handleGalleryPreview = (e) => {
     setGalleryPreview(Array.from(e.target.files));
@@ -62,6 +63,7 @@ export default function ProductDetails() {
     })
     
   }
+
   let navigator = useNavigate();
   useEffect(() => {
     if (navigatorStatus) {

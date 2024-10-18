@@ -1,5 +1,5 @@
 const express=require("express")
-const { sizeView, colorView, subCategoryView, productInsert, parentcat, productView, multipleCategoryRowDelete } = require("../../controller/admin/productController")
+const { sizeView, colorView, subCategoryView, productInsert, parentcat, productView, multipleCategoryRowDelete, singleCategoryDelete } = require("../../controller/admin/productController")
 
 const productRoute=express.Router()
 const multer=require("multer")
@@ -19,7 +19,8 @@ productRoute.post("/product-insert",uploads("uploads/product").fields([
 
 
 productRoute.get("/product-view",productView)
-productRoute.get("/multiple-delete",multipleCategoryRowDelete)
+productRoute.post("/multiple-delete",multipleCategoryRowDelete)
+productRoute.post("/delete/:id",singleCategoryDelete)
 
 productRoute.get("/parent-category",parentcat)
 
