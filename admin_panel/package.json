@@ -10,13 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "2": "^3.0.0",
+=======
+    "@reduxjs/toolkit": "^2.3.0",
+>>>>>>> 38aa776422854348103d8b4629410a8cd70df4af
     "animate.css": "^4.1.1",
     "axios": "^1.7.7",
     "react": "^18.3.1",
     "react-color": "^2.19.3",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
+    "react-redux": "^9.1.2",
     "react-responsive-pagination": "^2.8.0",
     "react-router-dom": "^6.26.1",
     "react-toastify": "^10.0.6",

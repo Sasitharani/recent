@@ -6,7 +6,11 @@ const { sliderRoute } = require("./admin/sliderRoutes")
 const { colorRoute } = require("./admin/colorRoutes")
 const { subCategoryRoute } = require("./admin/subCategoryRoutes")
 const { productRoute } = require("./admin/productRoutes")
+const { authRoute } = require("./admin/authRoutes")
 const adminRoute=express.Router()
+
+
+adminRoute.use("/auth",authRoute)
 
 adminRoute.use("/category",categoryRoute)
 adminRoute.use("/size",sizeRoute)
