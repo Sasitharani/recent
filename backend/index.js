@@ -15,8 +15,8 @@ app.use("/uploads/slider", express.static("uploads/slider"))
 app.use("/uploads/subCategory", express.static("uploads/subCategory"))
 
 
-mongoose.connect(`mongodb://127.0.0.1:27017/${process.env.DB_NAME}`) 
-// mongoose.connect(`mongodb+srv://sasitharan:sasi@learn.vfrd0.mongodb.net/${process.env.DBNAME}`)
+//mongoose.connect(`mongodb://127.0.0.1:27017/${process.env.DB_NAME}`)
+mongoose.connect(`mongodb+srv://sasitharan:sasi@learn.vfrd0.mongodb.net/${process.env.DBNAME}`)
 .then( async (res)=>{
     app.listen(process.env.SERVER_PORT)
     console.log(process.env.SERVER_PORT)

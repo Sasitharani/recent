@@ -10,18 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD:frontend/package.json
     "2": "^3.0.0",
-    "@fortawesome/fontawesome-free": "^6.6.0",
-=======
-    "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "@reduxjs/toolkit": "^2.3.0",
->>>>>>> 72366f7dee30d587ff88e6e06033cb3349e6c4ea:admin_panel/package.json
     "animate.css": "^4.1.1",
     "axios": "^1.7.7",
-    "install": "^0.13.0",
     "react": "^18.3.1",
     "react-color": "^2.19.3",
     "react-dom": "^18.3.1",
