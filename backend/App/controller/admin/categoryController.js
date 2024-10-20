@@ -1,6 +1,9 @@
 const { status } = require("express/lib/response");
 const { categoryModel } = require("../../modal/admin/categoryModal");
 fs = require("fs");
+
+
+
 let categoryInsert = async (req, res) => {
   let { categoryName, categoryDescription, categoryStatus } = req.body;
   let categoryData = {

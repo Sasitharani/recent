@@ -2,6 +2,7 @@ const { adminModal } = require("../../../modal/adminModel")
 
 
 let login=async (req,res)=>{
+    console.log(req.body);
    let {uemail,upassword} =req.body;
    let obj
    try{

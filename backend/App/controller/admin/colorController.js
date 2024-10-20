@@ -27,18 +27,21 @@ let colorInsert = async (req, res) => {
 };
 
 let colorView = async (req, res) => {
-  let searchObject={}
-  let limit=5
-  let {colorName,colorCode,pageNumber}=req.query
-  if(colorName!==""){
-    searchObject['colorName']=new RegExp(colorName,"i")
+  let searchObject = {};
+  let limit = 5;
+  let { colorName, colorCode, pageNumber } = req.query;
+  if (colorName !== "") {
+    searchObject["colorName"] = new RegExp(colorName, "i");
   }
-  if(colorCode!==""){
-    searchObject['colorCode']=new RegExp(colorCode,"i")
+  if (colorCode !== "") {
+    searchObject["colorCode"] = new RegExp(colorCode, "i");
   }
-  const colorData = await colorModal.find(searchObject).skip((pageNumber-1)*limit).limit(limit);
-  const totalPageNumber=await colorModal.find(searchObject)
-  let allPage=Math.ceil(totalPageNumber.length/limit)
+  const colorData = await colorModal
+    .find(searchObject)
+    .skip((pageNumber - 1) * limit)
+    .limit(limit);
+  const totalPageNumber = await colorModal.find(searchObject);
+  let allPage = Math.ceil(totalPageNumber.length / limit);
   let response = {
     status: 1,
     dataList: colorData,
@@ -101,7 +104,7 @@ let colorMultipleDelete = async (req, res) => {
 let colorEditRowData = async (req, res) => {
   try {
     let id = req.params.id;
-    let colorData = await colorModal.findOne({_id: id});
+    let colorData = await colorModal.findOne({ _id: id });
     if (colorData) {
       res.status(200).json({
         status: 1,
@@ -123,26 +126,29 @@ let colorEditRowData = async (req, res) => {
   }
 };
 
-let colorUpdateRowData=async (req,res)=>{
-    let id=req.params.id
-    let { colorCode, colorName, colorStatus } = req.body;
-    let colorData = {
-      colorName: colorName,
-      colorCode: colorCode,
-      colorStatus: colorStatus,
-    };
-    let colorUpdate=await colorModal.updateOne({_id:id},{$set:colorData})
-    res.status(200).json({
-        status:1,
-        message:"Record updated.",
-        res:colorUpdate
-    })
-}
+let colorUpdateRowData = async (req, res) => {
+  let id = req.params.id;
+  let { colorCode, colorName, colorStatus } = req.body;
+  let colorData = {
+    colorName: colorName,
+    colorCode: colorCode,
+    colorStatus: colorStatus,
+  };
+  let colorUpdate = await colorModal.updateOne(
+    { _id: id },
+    { $set: colorData }
+  );
+  res.status(200).json({
+    status: 1,
+    message: "Record updated.",
+    res: colorUpdate,
+  });
+};
 module.exports = {
   colorInsert,
   colorView,
   colorSingleDelete,
   colorMultipleDelete,
   colorEditRowData,
-  colorUpdateRowData
+  colorUpdateRowData,
 };

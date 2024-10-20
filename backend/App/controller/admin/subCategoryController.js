@@ -18,6 +18,8 @@ let parentCategoryView = async (req, res) => {
 };
 
 let subCategoryInsert = async (req, res) => {
+  // console.log(req.body)
+  // console.log(req.file)
   let subCategoryData = {
     subCategoryName: req.body.subCategoryName,
     parentCategoryId: req.body.parentCategoryId,
@@ -31,7 +33,7 @@ let subCategoryInsert = async (req, res) => {
   }
   try {
     const subCategoryCollection = new subcategoryModel(subCategoryData);
-
+    console.log('return:'.subCategoryData)
     let subCatRes = await subCategoryCollection.save();
     res.status(200).json({
       status: 1,
@@ -39,7 +41,7 @@ let subCategoryInsert = async (req, res) => {
       res: subCatRes,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(200).json({
       status: 0,
       message: "sub category already exists !",
       error: error,

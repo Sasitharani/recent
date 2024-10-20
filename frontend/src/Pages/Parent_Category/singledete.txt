@@ -1,0 +1,41 @@
+  let singleDeleteCategory = (id) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      buttonsStyling: true,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+        confirmButtonColor: "#F90101",
+        cancelButtonColor: "#0D0D0D",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          axios.delete(AdminBaseURL + `/category/delete/${id}`).then((res) => {
+            if (res.data.status == 1) {
+              console.log(res.data);
+            }
+            swalWithBootstrapButtons.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
+            viewCategory();
+          });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: "Cancelled",
+            text: "Your imaginary file is safe :)",
+            icon: "error",
+          });
+        }
+      });
+  };
